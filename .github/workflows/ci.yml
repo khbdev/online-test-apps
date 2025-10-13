@@ -27,7 +27,7 @@ jobs:
       - name: Build ${{ matrix.service }}
         run: |
           cd ${{ matrix.service }}
-          go build -o bin/${{ matrix.service }} .
+          go build -o bin/${{ matrix.service }} ./cmd/main.go
 
       - name: Test ${{ matrix.service }}
         run: |
