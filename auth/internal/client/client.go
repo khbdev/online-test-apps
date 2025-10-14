@@ -1,22 +1,35 @@
 package client
 
-type User struct {
-	Username string
-	Password string
-}
+import (
+	"context"
+	"log"
+	"time"
 
-
-var Users = []User{
-	{Username: "admin", Password: "123456"},
-	{Username: "aziz", Password: "password"},
-}
-
+	pb "github.com/khbdev/proto-online-test/proto/admin"
+	"google.golang.org/grpc"
+)
 
 func FindUser(username, password string) bool {
-	for _, u := range Users {
-		if u.Username == username && u.Password == password {
-			return true
-		}
+	conn, err := grpc.Dial("127.0.0.1:50052", grpc.WithInsecure())
+	if err != nil {
+		log.Printf("❌ Failed to connect to admin-service: %v", err)
+		return false
 	}
-	return false
+	defer conn.Close()
+
+	client := pb.NewAdminServiceClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	resp, err := client.VerifyAdmin(ctx, &pb.VerifyAdminRequest{
+		Username: username,
+		Password: password,
+	})
+	if err != nil {
+		log.Printf("❌ VerifyAdmin error: %v", err)
+		return false
+	}
+
+	return resp.Valid
 }
