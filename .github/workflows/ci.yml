@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         go: [1.24, 1.25]
-        service: [auth, admin]
+        service: [auth, admin, user]
 
     steps:
       - name: Checkout repo
