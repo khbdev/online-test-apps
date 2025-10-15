@@ -14,7 +14,7 @@ FROM alpine:latest
 
 WORKDIR /app
 
-COPY --from=builder /app/admin-service .
+COPY --from=builder /app/user-service .
 COPY .env . 
 
 EXPOSE 50053
