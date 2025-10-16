@@ -66,6 +66,8 @@ func (r *UserRepository) Update(id uint, updatedUser *models.User) (*models.User
 	user.Javoblar = updatedUser.Javoblar
 	user.TogriJavoblar = updatedUser.TogriJavoblar
 	user.NatogriJavoblar = updatedUser.NatogriJavoblar
+	user.ScorePercent = updatedUser.ScorePercent
+	user.Description = updatedUser.Description
 	
 
 	if err := r.db.Save(user).Error; err != nil {

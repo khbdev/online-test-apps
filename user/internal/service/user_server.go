@@ -16,8 +16,8 @@ func NewUserService(repo *repository.UserRepository) *UserService {
 
 func (s *UserService) Create(
 	firstName, lastName, phone, email, tgUsername,
-	bolimlar, savollar, javoblar string,
-	togriJavoblar, natogriJavoblar int,
+	bolimlar, savollar, javoblar, description string,
+	togriJavoblar, natogriJavoblar, scorePercent int,
 ) (*models.User, error) {
 
 	user := &models.User{
@@ -31,10 +31,13 @@ func (s *UserService) Create(
 		Javoblar:        javoblar,
 		TogriJavoblar:   togriJavoblar,
 		NatogriJavoblar: natogriJavoblar,
+		ScorePercent:    scorePercent,
+		Description:     description,
 	}
 
 	return s.repo.Create(user)
 }
+
 
 
 func (s *UserService) GetAll() ([]models.User, error) {
@@ -50,8 +53,8 @@ func (s *UserService) GetByID(id uint) (*models.User, error) {
 func (s *UserService) Update(
 	id uint,
 	firstName, lastName, phone, email, tgUsername,
-	bolimlar, savollar, javoblar string,
-	togriJavoblar, natogriJavoblar int,
+	bolimlar, savollar, javoblar, description string,
+	togriJavoblar, natogriJavoblar, scorePercent int,
 ) (*models.User, error) {
 
 	updatedUser := &models.User{
@@ -65,10 +68,13 @@ func (s *UserService) Update(
 		Javoblar:        javoblar,
 		TogriJavoblar:   togriJavoblar,
 		NatogriJavoblar: natogriJavoblar,
+		ScorePercent:    scorePercent,
+		Description:     description,
 	}
 
 	return s.repo.Update(id, updatedUser)
 }
+
 
 func (s *UserService) Delete(id uint) error {
 	return s.repo.Delete(id)

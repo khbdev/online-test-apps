@@ -14,4 +14,6 @@ type User struct {
 	Javoblar        string `gorm:"column:javoblar;type:json"`
 	TogriJavoblar   int    `gorm:"column:togri_javoblar"`
 	NatogriJavoblar int    `gorm:"column:natogri_javoblar"`
+	ScorePercent int    `gorm:"column:score_percent"`
+	Description  string `gorm:"column:description;type:text"`
 }
