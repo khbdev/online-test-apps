@@ -30,7 +30,7 @@ func main() {
 
 	switch action {
 	case "get":
-		key := "SampleTest_1760979882191143154" // Redis key, test yaratgandan key oling
+		key := "10-ta-oldimi-yoqmi-2_1761244224091540466" // Redis key, test yaratgandan key oling
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
@@ -43,12 +43,12 @@ func main() {
 
 	case "post":
 		// 2 section yuboriladi (ID=2 faqat mavjud)
-		sectionIDs := []int32{2, 2}
+		sectionIDs := []int32{2}
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 
 		resp, err := client.GenerateTest(ctx, &testpb.GenerateTestRequest{
-			Name:       "SampleTest",
+			Name:       "10-ta-oldimi-yoqmi-2",
 			SectionIds: sectionIDs,
 		})
 		if err != nil {

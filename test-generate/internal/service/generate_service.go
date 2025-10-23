@@ -16,7 +16,6 @@ type TestService struct {
 	Domain        string                   
 }
 
-
 func NewTestService(repo *repository.TestRepository, sc *client.SectionClient, domain string) *TestService {
 	return &TestService{
 		Repo:          repo,
@@ -25,27 +24,19 @@ func NewTestService(repo *repository.TestRepository, sc *client.SectionClient, d
 	}
 }
 
-
+// POST: GenerateTest
 func (s *TestService) GenerateTest(name string, sectionIDs []uint64) (string, error) {
 	var allSections []*testpb.Section
 
-
 	for _, id := range sectionIDs {
-		section, err := s.SectionClient.GetSection(id) 
+		section, err := s.SectionClient.GetSection(id)
 		if err != nil {
 			return "", fmt.Errorf("section %d olishda xatolik: %w", id, err)
 		}
 
-
-		for _, q := range section.Questions {
-			for _, o := range q.Options {
-				o.IsCorrect = false
-			}
-		}
-
+		
 		allSections = append(allSections, section)
 	}
-
 
 	key := fmt.Sprintf("%s_%d", name, time.Now().UnixNano())
 
@@ -54,11 +45,9 @@ func (s *TestService) GenerateTest(name string, sectionIDs []uint64) (string, er
 		Sections: allSections,
 	}
 
-
 	if err := s.Repo.Set(name, key, data, 30*time.Minute); err != nil {
 		return "", fmt.Errorf("Redisga saqlashda xatolik: %w", err)
 	}
-
 
 	link := fmt.Sprintf("%s/test/%s", s.Domain, key)
 	return link, nil
@@ -70,5 +59,21 @@ func (s *TestService) GetTest(key string) (*repository.TestData, error) {
 	if err != nil {
 		return nil, fmt.Errorf("testni Redisdan olishda xatolik: %w", err)
 	}
-	return data, nil
+
+
+	clientSections := make([]*testpb.Section, len(data.Sections))
+	for i, sec := range data.Sections {
+		secCopy := *sec // copy
+		for _, q := range secCopy.Questions {
+			for _, o := range q.Options {
+				o.IsCorrect = false
+			}
+		}
+		clientSections[i] = &secCopy
+	}
+
+	return &repository.TestData{
+		Name:     data.Name,
+		Sections: clientSections,
+	}, nil
 }
