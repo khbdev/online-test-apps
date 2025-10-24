@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         go: [1.24]
-        service: [auth, admin, user, test-section, test-generate, queue-job]
+        service: [auth, admin, user, test-section, test-generate, queue-job, filter]
 
     steps:
       - name: Checkout repo

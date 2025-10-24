@@ -3,7 +3,7 @@ module test
 go 1.24.0
 
 require (
-	github.com/khbdev/proto-online-test v0.0.0-20251023142221-8b5c1a4eac67
+	github.com/khbdev/proto-online-test v0.0.0-20251024160529-2c180b941c51
 	google.golang.org/grpc v1.76.0
 )
 
