@@ -30,7 +30,7 @@ func main() {
 
 	switch action {
 	case "get":
-		key := "10-ta-oldimi-yoqmi-2_1761244224091540466" // Redis key, test yaratgandan key oling
+		key := "Example_1761491567510010691" // Redis key, test yaratgandan key oling
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
 

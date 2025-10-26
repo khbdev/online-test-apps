@@ -20,7 +20,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 
 func (r *UserRepository) GetAll() ([]models.User, error) {
 	var users []models.User
-	if err := r.db.Find(&users).Error; err != nil {
+	if err := r.db.Select("id, first_name, last_name, phone, email, tg_username, togri_javoblar, natogri_javoblar, score_percent, description").Find(&users).Error; err != nil {
 		return nil, err
 	}
 	return users, nil

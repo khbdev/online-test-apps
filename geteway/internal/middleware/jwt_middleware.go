@@ -28,7 +28,7 @@ func JWTMiddleware() gin.HandlerFunc {
 		}
 
 		tokenString := parts[1]
-		secret := util.LoadEnv("JWT_SECRET")
+		secret := util.LoadEnv("JWT_ACCESS_SECRET")
 		if secret == "" {
 			response.Error(c, http.StatusInternalServerError, "JWT_SECRET topilmadi", nil)
 			c.Abort()

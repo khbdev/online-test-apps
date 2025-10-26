@@ -3,11 +3,11 @@ package client
 import (
 	"context"
 	"fmt"
-	"geteway-service/internal/discovery"
+	"geteway-service/internal/util/connect"
 	"log"
 	"time"
 
-	 authpb "github.com/khbdev/proto-online-test/proto/auth"
+	authpb "github.com/khbdev/proto-online-test/proto/auth"
 	"google.golang.org/grpc"
 )
 
@@ -18,30 +18,17 @@ type AuthClient struct {
 
 
 func NewAuthClient() (*AuthClient, error) {
-	addr, err := discovery.GetServiceAddress("auth-service")
+	conn, err := connect.ConnectService("auth-service")
 	if err != nil {
-		return nil, fmt.Errorf("auth service address topilmadi: %v", err)
+		return nil, fmt.Errorf("Auth service bilan ulanish xatosi: %v", err)
 	}
 
-	var conn *grpc.ClientConn
-	var dialErr error
+	client := authpb.NewAuthServiceClient(conn)
 
-	for i := 1; i <= 3; i++ {
-		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-		defer cancel()
-
-		conn, dialErr = grpc.DialContext(ctx, addr, grpc.WithInsecure(), grpc.WithBlock())
-		if dialErr == nil {
-			log.Printf("[AuthClient] ✅ Ulandi: %s", addr)
-			client := authpb.NewAuthServiceClient(conn)
-			return &AuthClient{conn: conn, client: client}, nil
-		}
-
-		log.Printf("[AuthClient] ❌ Ulanib bo‘lmadi (urinish %d/3): %v", i, dialErr)
-		time.Sleep(1 * time.Second)
-	}
-
-	return nil, fmt.Errorf("auth service bilan 3 marta ulanish muvaffaqiyatsiz: %v", dialErr)
+	return &AuthClient{
+		client: client,
+		conn:   conn,
+	}, nil
 }
 
 

@@ -1,19 +1,21 @@
 package service
 
 import (
+	"encoding/json"
 	models "user-service/internal/model"
-	repository "user-service/internal/repostory"
+	"user-service/internal/repostory"
+
 )
 
 type UserService struct {
-	repo *repository.UserRepository
+	repo *repostory.UserRepository
 }
 
-func NewUserService(repo *repository.UserRepository) *UserService {
+func NewUserService(repo *repostory.UserRepository) *UserService {
 	return &UserService{repo: repo}
 }
 
-
+// Create yangi user
 func (s *UserService) Create(
 	firstName, lastName, phone, email, tgUsername,
 	bolimlar, savollar, javoblar, description string,
@@ -35,21 +37,39 @@ func (s *UserService) Create(
 		Description:     description,
 	}
 
-	return s.repo.Create(user)
+	u, err := s.repo.Create(user)
+	if err != nil {
+		return nil, err
+	}
+
+	return parseUserJSONFields(u), nil
 }
 
-
-
+// GetAll barcha userlar
 func (s *UserService) GetAll() ([]models.User, error) {
-	return s.repo.GetAll()
+	users, err := s.repo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range users {
+	 parseUserJSONFields(&users[i])
+	}
+
+	return users, nil
 }
 
-
+// GetByID ID orqali user
 func (s *UserService) GetByID(id uint) (*models.User, error) {
-	return s.repo.GetByID(id)
+	u, err := s.repo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return parseUserJSONFields(u), nil
 }
 
-
+// Update user
 func (s *UserService) Update(
 	id uint,
 	firstName, lastName, phone, email, tgUsername,
@@ -72,10 +92,44 @@ func (s *UserService) Update(
 		Description:     description,
 	}
 
-	return s.repo.Update(id, updatedUser)
+	u, err := s.repo.Update(id, updatedUser)
+	if err != nil {
+		return nil, err
+	}
+
+	return parseUserJSONFields(u), nil
 }
 
-
+// Delete user
 func (s *UserService) Delete(id uint) error {
 	return s.repo.Delete(id)
+}
+
+// parseUserJSONFields - string JSON maydonlarni parse qilib obyektga aylantiradi
+func parseUserJSONFields(u *models.User) *models.User {
+	if u == nil {
+		return nil
+	}
+
+	var parsed interface{}
+
+	if u.Bolimlar != "" {
+		if err := json.Unmarshal([]byte(u.Bolimlar), &parsed); err == nil {
+			u.BolimlarParsed = parsed
+		}
+	}
+
+	if u.Savollar != "" {
+		if err := json.Unmarshal([]byte(u.Savollar), &parsed); err == nil {
+			u.SavollarParsed = parsed
+		}
+	}
+
+	if u.Javoblar != "" {
+		if err := json.Unmarshal([]byte(u.Javoblar), &parsed); err == nil {
+			u.JavoblarParsed = parsed
+		}
+	}
+
+	return u
 }
