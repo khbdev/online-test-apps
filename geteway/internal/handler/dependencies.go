@@ -13,6 +13,7 @@ type Dependencies struct {
 	TestHandler *TestHandler
 	JobHandler *JobHandler
 	FilterHandler *FilterHandler
+	TestSectionHandler *TestSectionHandler
 	
 }
 
@@ -67,6 +68,18 @@ if err != nil {
 	filterService := service.NewFilterService(filterClient)
 	filterHandler := NewFilterHandler(filterService)
 
+	// test section service 
+
+	testsectionClient, err := client.NewTestClient()
+	if err != nil {
+		log.Fatalf("[Dependencies] testsectionClient  ulanishda xatolik: %v", err)
+	}
+	testsectionService := service.NewTestService(testsectionClient)
+
+	testsectionHandler := NewTestSectionHandler(testsectionService)
+
+
+
 	return &Dependencies{
 		AuthHandler:  authHandler,
 		AdminHandler: adminHandler,
@@ -74,6 +87,7 @@ if err != nil {
 		TestHandler: generateHandler,
 		JobHandler: JobHandler,
 		FilterHandler: filterHandler,
+		TestSectionHandler: testsectionHandler,
 		
 	}
 }

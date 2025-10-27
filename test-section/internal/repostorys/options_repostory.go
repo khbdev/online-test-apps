@@ -31,7 +31,12 @@ func (r *OptionRepository) GetByID(id uint) (*models.Option, error) {
 }
 
 func (r *OptionRepository) Update(o *models.Option) error {
-	return r.DB.Save(o).Error
+	return r.DB.Model(&models.Option{}).
+		Where("id = ?", o.ID).
+		Updates(map[string]interface{}{
+			"text":       o.Text,
+			"is_correct": o.IsCorrect,
+		}).Error
 }
 
 func (r *OptionRepository) Delete(id uint) error {

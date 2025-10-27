@@ -31,7 +31,12 @@ func (r *QuestionRepository) GetByID(id uint) (*models.Question, error) {
 }
 
 func (r *QuestionRepository) Update(q *models.Question) error {
-	return r.DB.Save(q).Error
+	return r.DB.Model(&models.Question{}).
+		Where("id = ?", q.ID).
+		Updates(map[string]interface{}{
+			"section_id": q.SectionID,
+			"text":       q.Text,
+		}).Error
 }
 
 func (r *QuestionRepository) Delete(id uint) error {

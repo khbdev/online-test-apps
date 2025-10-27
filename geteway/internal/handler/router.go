@@ -2,7 +2,6 @@ package handler
 
 import (
 	"geteway-service/internal/middleware"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,6 +14,7 @@ func SetupRoutes(r *gin.Engine) {
 		auth.POST("/login", deps.AuthHandler.Login)
 	}
 
+	// 🔹 Admin
 	admin := r.Group("/admin")
 	admin.Use(middleware.JWTMiddleware())
 	{
@@ -25,6 +25,7 @@ func SetupRoutes(r *gin.Engine) {
 		admin.DELETE("/delete/:id", deps.AdminHandler.Delete)
 	}
 
+	// 🔹 User
 	user := r.Group("/user")
 	user.Use(middleware.JWTMiddleware())
 	{
@@ -35,21 +36,58 @@ func SetupRoutes(r *gin.Engine) {
 		user.DELETE("/delete/:id", deps.UserHandler.Delete)
 	}
 
-test := r.Group("/test")
+	// 🔹 Test (ochiq va JWT aralash)
+	test := r.Group("/test")
+	{
+		test.POST("/generate", middleware.JWTMiddleware(), deps.TestHandler.GenerateTest)
+		test.GET("/get", deps.TestHandler.GetTest)
+	}
 
-// faqat generate uchun JWT kerak
-test.POST("/generate", middleware.JWTMiddleware(), deps.TestHandler.GenerateTest)
+	// 🔹 Job
+	job := r.Group("/job")
+	{
+		job.POST("/submit", deps.JobHandler.SubmitTest)
+	}
 
-// get esa ochiq
-test.GET("/get", deps.TestHandler.GetTest)
+	// 🔹 Filter
+	filter := r.Group("/filter")
+	filter.Use(middleware.JWTMiddleware())
+	{
+		filter.POST("/users", deps.FilterHandler.GetUsers)
+	}
 
-job := r.Group("/job")
-{
-	job.POST("/submit", deps.JobHandler.SubmitTest)
-}
-filter := r.Group("/filter")
-filter.Use(middleware.JWTMiddleware())
-{
-	filter.POST("/users", deps.FilterHandler.GetUsers)
-}
+	// 🔹 SECTION CRUD
+	section := r.Group("/section")
+	section.Use(middleware.JWTMiddleware())
+	{
+		section.GET("/list", deps.TestSectionHandler.GetAllSections)
+		section.GET("/:id", deps.TestSectionHandler.GetSectionById)
+		section.POST("/create", deps.TestSectionHandler.CreateSection)
+		section.PUT("/update/:id", deps.TestSectionHandler.UpdateSection)
+		section.DELETE("/delete/:id", deps.TestSectionHandler.DeleteSection)
+	}
+
+	// 🔹 QUESTION CRUD
+	question := r.Group("/question")
+	question.Use(middleware.JWTMiddleware())
+	{
+		question.GET("/list", deps.TestSectionHandler.GetAllQuestions)
+		question.GET("/:id", deps.TestSectionHandler.GetQuestionById)
+		question.POST("/create", deps.TestSectionHandler.CreateQuestion)
+		question.PUT("/update/:id", deps.TestSectionHandler.UpdateQuestion)
+		question.DELETE("/delete/:id", deps.TestSectionHandler.DeleteQuestion)
+	}
+
+	// 🔹 OPTION CRUD
+	option := r.Group("/option")
+	option.Use(middleware.JWTMiddleware())
+	{
+		option.GET("/list", deps.TestSectionHandler.GetAllOptions)
+		option.GET("/:id", deps.TestSectionHandler.GetOptionById)
+		option.POST("/create", deps.TestSectionHandler.CreateOption)
+		option.PUT("/update/:id", deps.TestSectionHandler.UpdateOption)
+		option.DELETE("/delete/:id", deps.TestSectionHandler.DeleteOption)
+	}
+
+
 }
