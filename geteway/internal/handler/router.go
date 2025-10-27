@@ -35,13 +35,21 @@ func SetupRoutes(r *gin.Engine) {
 		user.DELETE("/delete/:id", deps.UserHandler.Delete)
 	}
 
-	test := r.Group("/test")
-	test.Use(middleware.JWTMiddleware())
-{
-	
-	test.POST("/generate", deps.TestHandler.GenerateTest)
+test := r.Group("/test")
 
-	
-	test.GET("/get", deps.TestHandler.GetTest)
+// faqat generate uchun JWT kerak
+test.POST("/generate", middleware.JWTMiddleware(), deps.TestHandler.GenerateTest)
+
+// get esa ochiq
+test.GET("/get", deps.TestHandler.GetTest)
+
+job := r.Group("/job")
+{
+	job.POST("/submit", deps.JobHandler.SubmitTest)
+}
+filter := r.Group("/filter")
+filter.Use(middleware.JWTMiddleware())
+{
+	filter.POST("/users", deps.FilterHandler.GetUsers)
 }
 }

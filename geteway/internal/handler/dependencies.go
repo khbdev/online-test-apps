@@ -11,6 +11,8 @@ type Dependencies struct {
 	AdminHandler *AdminHandler
 	UserHandler *UserHandler
 	TestHandler *TestHandler
+	JobHandler *JobHandler
+	FilterHandler *FilterHandler
 	
 }
 
@@ -49,13 +51,29 @@ if err != nil {
 	 generateService := service.NewGenerateService(generateClint)
 
 	 generateHandler := NewGenerateHandler(generateService)
+// Job Service 
+jobClient, err := client.NewJobClient()
+if err != nil {
+		log.Fatalf("[Dependencies] JobClient ulanishda xatolik: %v", err)
+	}
+jobService := service.NewJobService(jobClient)
+JobHandler := NewJobHandler(jobService)
 
+// filter service 
+filterClient, err  := client.NewFilterClient()
+if err != nil {
+		log.Fatalf("[Dependencies] JobClient ulanishda xatolik: %v", err)
+	}
+	filterService := service.NewFilterService(filterClient)
+	filterHandler := NewFilterHandler(filterService)
 
 	return &Dependencies{
 		AuthHandler:  authHandler,
 		AdminHandler: adminHandler,
 		UserHandler: userHandler,
 		TestHandler: generateHandler,
+		JobHandler: JobHandler,
+		FilterHandler: filterHandler,
 		
 	}
 }
