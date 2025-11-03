@@ -8,7 +8,7 @@ RUN go mod download
 COPY . .
 
 
-RUN go build -o test ./auth/main.go
+RUN go build -o test ./cmd/main.go
 
 FROM alpine:latest
 
