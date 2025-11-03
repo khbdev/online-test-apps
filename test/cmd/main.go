@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// 1. gRPC serverga ulanamiz
-	conn, err := grpc.Dial("127.0.0.1:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("auth-service:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
 
 	if err != nil {
 		log.Fatalf("❌ Failed to connect: %v", err)
