@@ -12,6 +12,7 @@ func SetupRoutes(r *gin.Engine) {
 	auth := r.Group("/auth")
 	{
 		auth.POST("/login", deps.AuthHandler.Login)
+		auth.POST("/refresh", deps.AuthHandler.Refresh)
 	}
 
 	// 🔹 Admin

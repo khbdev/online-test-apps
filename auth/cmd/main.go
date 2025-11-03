@@ -16,14 +16,9 @@ func main(){
 	// env config 
 	config.InitJWT()
 	config.InitPort()
+	config.InitGRPC()
 
 
-	// pair, err := jwt.GenerateTokens("admin")
-	// if  err != nil {
-	// 	log.Fatal("Error caling", err)
-	// }
-	// fmt.Println("Access", pair.AccessToken)
-	// fmt.Println("Reffresh", pair.RefreshToken)
 lis, err := net.Listen("tcp", config.Server.GRPCPort)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

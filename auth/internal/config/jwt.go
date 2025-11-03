@@ -21,7 +21,7 @@ func InitJWT() {
 	_ = godotenv.Load()
 
 	accessTTL, _ := time.ParseDuration(getEnv("JWT_ACCESS_TTL", "15m"))
-	refreshTTL, _ := time.ParseDuration(getEnv("JWT_REFRESH_TTL", "7d"))
+	refreshTTL, _ := time.ParseDuration(getEnv("JWT_REFRESH_TTL", "720h"))
 
 	JWT = &JWTConfig{
 		AccessSecret:  getEnv("JWT_ACCESS_SECRET", "default_access_secret"),

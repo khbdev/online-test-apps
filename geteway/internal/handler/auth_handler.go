@@ -4,7 +4,7 @@ import (
 	"geteway-service/internal/response"
 	"geteway-service/internal/service"
 	"github.com/gin-gonic/gin"
-	"io/ioutil"
+	"io"
 	"net/http"
 )
 
@@ -16,8 +16,9 @@ func NewAuthHandler(authService *service.AuthService) *AuthHandler {
 	return &AuthHandler{authService: authService}
 }
 
+// ✅ Login
 func (h *AuthHandler) Login(c *gin.Context) {
-	body, err := ioutil.ReadAll(c.Request.Body)
+	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		response.Error(c, http.StatusBadRequest, "bodyni o‘qishda xatolik", err.Error())
 		return
@@ -25,9 +26,26 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	data, err := h.authService.Login(c, body)
 	if err != nil {
-		response.Error(c, http.StatusInternalServerError, "login amalga oshmadi", err.Error())
+		response.Error(c, http.StatusUnauthorized, "login amalga oshmadi", err.Error())
 		return
 	}
 
 	response.Success(c, "login muvaffaqiyatli", data)
+}
+
+// ✅ Refresh token orqali yangi access token olish
+func (h *AuthHandler) Refresh(c *gin.Context) {
+	body, err := io.ReadAll(c.Request.Body)
+	if err != nil {
+		response.Error(c, http.StatusBadRequest, "bodyni o‘qishda xatolik", err.Error())
+		return
+	}
+
+	data, err := h.authService.Refresh(c, body)
+	if err != nil {
+		response.Error(c, http.StatusUnauthorized, "refresh amalga oshmadi", err.Error())
+		return
+	}
+
+	response.Success(c, "token yangilandi", data)
 }

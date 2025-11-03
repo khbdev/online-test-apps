@@ -16,7 +16,6 @@ type AuthClient struct {
 	client authpb.AuthServiceClient
 }
 
-
 func NewAuthClient() (*AuthClient, error) {
 	conn, err := connect.ConnectService("auth-service")
 	if err != nil {
@@ -31,14 +30,13 @@ func NewAuthClient() (*AuthClient, error) {
 	}, nil
 }
 
-
 func (a *AuthClient) Close() {
 	if a.conn != nil {
 		_ = a.conn.Close()
 	}
 }
 
-
+// ✅ Login
 func (a *AuthClient) Login(username, password string) (*authpb.LoginResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -54,6 +52,25 @@ func (a *AuthClient) Login(username, password string) (*authpb.LoginResponse, er
 		return nil, err
 	}
 
-	log.Printf("[AuthClient]  Login muvaffaqiyatli: %s", username)
+	log.Printf("[AuthClient] Login muvaffaqiyatli: %s", username)
+	return res, nil
+}
+
+// ✅ RefreshToken — refresh token orqali yangi access token olish
+func (a *AuthClient) RefreshToken(refreshToken string) (*authpb.LoginResponse, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	req := &authpb.RefreshRequest{
+		RefreshToken: refreshToken,
+	}
+
+	res, err := a.client.RefreshToken(ctx, req)
+	if err != nil {
+		log.Printf("[AuthClient] RefreshToken xatolik: %v", err)
+		return nil, err
+	}
+
+	log.Printf("[AuthClient] RefreshToken muvaffaqiyatli yangilandi")
 	return res, nil
 }

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"auth-service/internal/config"
 	"context"
 	"log"
 	"time"
@@ -10,7 +11,7 @@ import (
 )
 
 func FindUser(username, password string) bool {
-	conn, err := grpc.Dial("127.0.0.1:50052", grpc.WithInsecure())
+	conn, err := grpc.Dial(config.GRPC.Address(), grpc.WithInsecure())
 	if err != nil {
 		log.Printf("❌ Failed to connect to admin-service: %v", err)
 		return false
