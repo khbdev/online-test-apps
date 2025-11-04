@@ -25,6 +25,8 @@ func main() {
         log.Fatal(err)
     }
 
+	config.InitPort()
+
     log.Println("Database connected successfully")
 
 	repo := repository.NewAdminRepository(config.DB)
@@ -33,7 +35,7 @@ func main() {
 
    handler := handler.NewAdminHandler(service)
 
-   lis, err := net.Listen("tcp", ":50052")
+   lis, err := net.Listen("tcp", config.Server.GRPCPort)
 	if err != nil {
 		log.Fatal("Port band:", err)
 	}
