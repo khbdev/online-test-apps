@@ -23,7 +23,7 @@ func main() {
 
 	// 2. Request tayyorlaymiz
 	req := &auth.LoginRequest{
-		Username: "gopher",
+		Username: "admin",
 		Password: "123456",
 	}
 

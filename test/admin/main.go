@@ -18,7 +18,7 @@ func main() {
 	password := flag.String("password", "", "Password")
 	flag.Parse()
 
-	conn, err := grpc.Dial("localhost:50052", grpc.WithInsecure())
+	conn, err := grpc.Dial("admin-service:50052", grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("❌ Failed to connect: %v", err)
 	}
