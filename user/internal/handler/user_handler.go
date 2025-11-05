@@ -2,9 +2,11 @@ package handler
 
 import (
 	"context"
+	"fmt"
 
 	models "user-service/internal/model"
 	"user-service/internal/service"
+	"user-service/internal/validation"
 
 	userpb "github.com/khbdev/proto-online-test/proto/user"
 )
@@ -22,6 +24,27 @@ func NewUserHandler(svc *service.UserService) *UserHandler {
 
 
 func (h *UserHandler) CreateUser(ctx context.Context, req *userpb.CreateUserRequest) (*userpb.CreateUserResponse, error) {
+	
+	 user := &models.User{
+        FirstName: req.FirstName,
+        LastName:  req.LastName,
+        Phone:     req.Phone,
+        Email:     req.Email,
+        TgUsername:req.TgUsername,
+        Bolimlar:  req.Bolimlar,
+        Savollar:  req.Savollar,
+        Javoblar:  req.Javoblar,
+        Description: req.Description,
+        TogriJavoblar: int(req.TogriJavoblar),
+        NatogriJavoblar: int(req.NatogriJavoblar),
+        ScorePercent: int(req.ScorePercent),
+    }
+
+    // 1️⃣ Validation
+    if err := validation.ValidateUser(user); err != nil {
+        return nil, fmt.Errorf("validation error: %v", err)
+    }
+	
 	createdUser, err := h.service.Create(
 		req.FirstName,
 		req.LastName,
@@ -75,6 +98,29 @@ func (h *UserHandler) GetUserByID(ctx context.Context, req *userpb.GetUserByIDRe
 
 
 func (h *UserHandler) UpdateUser(ctx context.Context, req *userpb.UpdateUserRequest) (*userpb.UpdateUserResponse, error) {
+
+
+ user := &models.User{
+        FirstName: req.FirstName,
+        LastName:  req.LastName,
+        Phone:     req.Phone,
+        Email:     req.Email,
+        TgUsername:req.TgUsername,
+        Bolimlar:  req.Bolimlar,
+        Savollar:  req.Savollar,
+        Javoblar:  req.Javoblar,
+        Description: req.Description,
+        TogriJavoblar: int(req.TogriJavoblar),
+        NatogriJavoblar: int(req.NatogriJavoblar),
+        ScorePercent: int(req.ScorePercent),
+    }
+
+    // 1️⃣ Validation
+    if err := validation.ValidateUser(user); err != nil {
+        return nil, fmt.Errorf("validation error: %v", err)
+    }
+
+
 	updatedUser, err := h.service.Update(
 		uint(req.Id),
 		req.FirstName,

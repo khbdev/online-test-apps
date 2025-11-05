@@ -19,8 +19,7 @@ type User struct {
 	NatogriJavoblar int         `gorm:"column:natogri_javoblar" json:"natogri_javoblar"`
 	ScorePercent    int         `gorm:"column:score_percent" json:"score_percent"`
 	Description     string      `gorm:"column:description;type:text" json:"description"`
-
-
+	
 	BolimlarParsed interface{} `gorm:"-" json:"bolimlar,omitempty"`
 	SavollarParsed interface{} `gorm:"-" json:"savollar,omitempty"`
 	JavoblarParsed interface{} `gorm:"-" json:"javoblar,omitempty"`
