@@ -41,7 +41,7 @@ func SetupRoutes(r *gin.Engine) {
 	test := r.Group("/test")
 	{
 		test.POST("/generate", middleware.JWTMiddleware(), deps.TestHandler.GenerateTest)
-		test.GET("/get", deps.TestHandler.GetTest)
+		test.POST("/get", deps.TestHandler.GetTest)
 	}
 
 	// 🔹 Job

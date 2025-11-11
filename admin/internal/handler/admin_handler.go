@@ -18,6 +18,7 @@ func NewAdminHandler(s *service.AdminService) *AdminHandler {
 	return &AdminHandler{service: s}
 }
 
+
 // CreateAdmin
 func (h *AdminHandler) CreateAdmin(ctx context.Context, req *pb.CreateAdminRequest) (*pb.CreateAdminResponse, error) {
 	admin, err := h.service.Create(req.Username, req.Password)

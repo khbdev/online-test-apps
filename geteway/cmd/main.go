@@ -2,6 +2,7 @@ package main
 
 import (
 	"geteway-service/internal/handler"
+	"geteway-service/internal/middleware"
 	"geteway-service/internal/util"
 	"log"
 
@@ -10,6 +11,7 @@ import (
 
 func main() {
 	r := gin.Default()
+	r.Use(middleware.CORSMiddleware())
 
 	handler.SetupRoutes(r)
 

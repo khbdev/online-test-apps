@@ -24,7 +24,7 @@ func main() {
 
 	sectionClient := client.NewSectionClient("127.0.0.1:50054") 
 
-	testService := service.NewTestService(testRepo, sectionClient, "http://localhost:8080") 
+	testService := service.NewTestService(testRepo, sectionClient, "http://localhost:5173") 
 
 
 	testHandler := handler.NewTestHandler(testService)
